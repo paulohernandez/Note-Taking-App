@@ -1,9 +1,14 @@
-import express , {Express,Request,Response} from 'express'
-import notesRouter from './routes/notesRoutes'
-const app:Express = express()
-const port = 4000
+import dotenv from "dotenv";
+dotenv.config();
+import express, { Express } from "express";
+import notesRouter from "./routes/notesRoutes";
+import connectDB from "./helpers/connectDB";
+const app: Express = express();
+const port = process.env.PORT;
+app.use(express.json());
+app.use("/api/notes", notesRouter);
 
-app.use('/api/notes', notesRouter)
-app.listen(port , () => {
-    console.log(`listening to port ${port}`);
-})
+app.listen(port, async () => {
+  await connectDB();
+  console.log(`listening to port ${port}`);
+});

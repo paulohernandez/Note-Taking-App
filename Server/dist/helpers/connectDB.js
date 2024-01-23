@@ -39,17 +39,16 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
+const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
-const express_1 = __importDefault(require("express"));
-const notesRoutes_1 = __importDefault(require("./routes/notesRoutes"));
-const connectDB_1 = __importDefault(require("./helpers/connectDB"));
-const app = (0, express_1.default)();
-const port = process.env.PORT;
-app.use(express_1.default.json());
-app.use("/api/notes", notesRoutes_1.default);
-app.listen(port, () =>
+const connectionString = process.env.MONGO_URI;
+const connectDB = () =>
   __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, connectDB_1.default)();
-    console.log(`listening to port ${port}`);
-  }),
-);
+    try {
+      yield mongoose_1.default.connect(`${connectionString}`);
+      console.log("Connected");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+exports.default = connectDB;
