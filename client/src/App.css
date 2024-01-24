@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+
+*{
+  font-family: 'Roboto', sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.App{
+  position: relative;
+}
+
+.noteFormContainer{
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}

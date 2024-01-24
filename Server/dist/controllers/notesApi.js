@@ -18,7 +18,7 @@ class notesApi {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const notes = yield notesModel_1.default.find({}).sort({ createdAt: -1 });
-                if (notes.length > 1) {
+                if (notes.length > 0) {
                     res.status(202).json({ data: notes });
                 }
                 else {
@@ -48,12 +48,26 @@ class notesApi {
     static insertNote(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { title, content, userId } = req.body;
-            try {
-                const note = yield notesModel_1.default.create({ title, content, userId });
-                res.status(202).json(note);
+            if (title == '' && content == '') {
+                res.status(400).json({ message: 'Title and content has no value', responsecode: 0 });
             }
-            catch (error) {
-                res.status(400).json({ message: "Error in NoSql", error: error.message });
+            else if (title == '') {
+                res.status(400).json({ message: 'Title is empty value', responsecode: 0 });
+            }
+            else if (content == '') {
+                res.status(400).json({ message: 'Content is empty value', responsecode: 0 });
+            }
+            else if (userId == '' && isNaN(userId)) {
+                res.status(400).json({ message: 'Id is not a number or Empty', responsecode: 0 });
+            }
+            else {
+                try {
+                    const note = yield notesModel_1.default.create({ title, content, userId });
+                    res.status(202).json({ note, responsecode: 1 });
+                }
+                catch (error) {
+                    res.status(400).json({ message: "Error in NoSql", error: error.message });
+                }
             }
         });
     }
@@ -80,7 +94,7 @@ class notesApi {
                 if (!deletedNote) {
                     res.status(400).json({ message: "No note found" });
                 }
-                res.status(202).json({ message: "Note Deleted" });
+                res.status(202).json({ message: "Note Deleted", data: deletedNote });
             }
             catch (error) {
                 res.status(400).json({ message: "Error in NoSql", error: error.message });
